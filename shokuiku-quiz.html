@@ -1,0 +1,751 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
+<meta name="description" content="Belajar soal ujian Shokuiku - Produk Daging Jepang (食肉製品). Latihan soal BAB 1, 2, 3 dengan sistem benar/salah."/>
+<meta name="theme-color" content="#0a0e1a"/>
+<title>食肉製品 — Belajar Soal Ujian</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --bg-base: #050810;
+    --bg-deep: #08102a;
+    --blue-1: #0d1f4e;
+    --blue-2: #1a3a80;
+    --blue-3: #2456b3;
+    --accent: #4d8df5;
+    --accent-glow: rgba(77,141,245,0.25);
+    --correct: #22d3a0;
+    --correct-bg: rgba(34,211,160,0.12);
+    --wrong: #f25f5c;
+    --wrong-bg: rgba(242,95,92,0.12);
+    --text-primary: #e8f0ff;
+    --text-secondary: #8aa4d6;
+    --text-muted: #4a6090;
+    --glass: rgba(13,31,78,0.45);
+    --glass-border: rgba(77,141,245,0.18);
+    --radius: 18px;
+    --radius-sm: 10px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+  body {
+    font-family: 'Noto Sans JP', sans-serif;
+    background: var(--bg-base);
+    color: var(--text-primary);
+    min-height: 100vh;
+    overflow-x: hidden;
+    position: relative;
+  }
+
+  /* ── BACKGROUND ORBS ── */
+  body::before, body::after {
+    content: '';
+    position: fixed;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 0;
+  }
+  body::before {
+    width: 320px; height: 320px;
+    background: radial-gradient(circle, rgba(36,86,179,0.35) 0%, transparent 70%);
+    top: -80px; left: -80px;
+    animation: floatA 8s ease-in-out infinite;
+  }
+  body::after {
+    width: 280px; height: 280px;
+    background: radial-gradient(circle, rgba(13,59,140,0.28) 0%, transparent 70%);
+    bottom: -60px; right: -60px;
+    animation: floatB 10s ease-in-out infinite;
+  }
+
+  @keyframes floatA {
+    0%,100% { transform: translate(0,0); }
+    50% { transform: translate(30px,40px); }
+  }
+  @keyframes floatB {
+    0%,100% { transform: translate(0,0); }
+    50% { transform: translate(-20px,-30px); }
+  }
+
+  /* ── APP WRAPPER ── */
+  #app {
+    position: relative; z-index: 1;
+    max-width: 480px;
+    margin: 0 auto;
+    padding: 0 0 120px;
+    min-height: 100vh;
+  }
+
+  /* ── HEADER ── */
+  header {
+    padding: 24px 20px 16px;
+    text-align: center;
+    position: relative;
+  }
+  .header-tag {
+    display: inline-block;
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    color: var(--accent);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    background: var(--accent-glow);
+    border: 1px solid var(--glass-border);
+    padding: 4px 12px;
+    border-radius: 20px;
+    margin-bottom: 10px;
+    animation: fadeDown 0.6s ease both;
+  }
+  header h1 {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--text-primary);
+    line-height: 1.3;
+    animation: fadeDown 0.7s ease both;
+  }
+  header h1 span {
+    background: linear-gradient(90deg, var(--accent), #8ac2ff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  header p {
+    font-size: 12px;
+    color: var(--text-secondary);
+    margin-top: 6px;
+    animation: fadeDown 0.8s ease both;
+  }
+
+  @keyframes fadeDown {
+    from { opacity: 0; transform: translateY(-14px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── CHAPTER TABS ── */
+  .chapter-nav {
+    display: flex;
+    gap: 8px;
+    padding: 0 20px 20px;
+    animation: fadeDown 0.9s ease both;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .chapter-nav::-webkit-scrollbar { display: none; }
+  .tab-btn {
+    flex: 1;
+    min-width: 90px;
+    padding: 10px 6px;
+    border-radius: var(--radius-sm);
+    background: var(--glass);
+    border: 1px solid var(--glass-border);
+    color: var(--text-secondary);
+    font-size: 12px;
+    font-weight: 600;
+    font-family: 'Noto Sans JP', sans-serif;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(12px);
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .tab-btn.active {
+    background: linear-gradient(135deg, var(--blue-2), var(--blue-3));
+    border-color: var(--accent);
+    color: white;
+    box-shadow: 0 0 18px var(--accent-glow);
+  }
+  .tab-btn:not(.active):hover { border-color: var(--accent); color: var(--text-primary); }
+  .tab-count {
+    display: block;
+    font-size: 18px;
+    font-weight: 700;
+    color: inherit;
+    margin-bottom: 2px;
+  }
+
+  /* ── SCORE BAR ── */
+  .score-bar {
+    margin: 0 20px 20px;
+    background: var(--glass);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius);
+    padding: 14px 18px;
+    backdrop-filter: blur(12px);
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    animation: fadeUp 0.8s ease both;
+  }
+  .score-icon {
+    font-size: 26px;
+    line-height: 1;
+  }
+  .score-info { flex: 1; }
+  .score-label {
+    font-size: 10px;
+    color: var(--text-muted);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    font-family: 'Space Mono', monospace;
+  }
+  .score-nums {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-top: 2px;
+  }
+  .score-nums .correct-num { color: var(--correct); }
+  .score-nums .slash { color: var(--text-muted); margin: 0 4px; }
+  .score-track {
+    height: 4px;
+    background: var(--blue-1);
+    border-radius: 2px;
+    margin-top: 8px;
+    overflow: hidden;
+  }
+  .score-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--correct), #4df5d8);
+    border-radius: 2px;
+    transition: width 0.5s ease;
+    width: 0%;
+  }
+  .badge-row {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    margin-top: 8px;
+  }
+  .badge {
+    font-size: 10px;
+    font-family: 'Space Mono', monospace;
+    padding: 2px 8px;
+    border-radius: 20px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+  }
+  .badge-correct { background: var(--correct-bg); color: var(--correct); border: 1px solid rgba(34,211,160,0.3); }
+  .badge-wrong { background: var(--wrong-bg); color: var(--wrong); border: 1px solid rgba(242,95,92,0.3); }
+  .badge-perfect { background: linear-gradient(90deg,rgba(77,141,245,0.2),rgba(34,211,160,0.2)); color: #8ac2ff; border: 1px solid var(--glass-border); }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(14px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── SOAL HEADER ── */
+  .section-header {
+    padding: 0 20px 12px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .section-title {
+    font-size: 11px;
+    color: var(--text-muted);
+    font-family: 'Space Mono', monospace;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+  .section-filter {
+    display: flex;
+    gap: 6px;
+  }
+  .filter-btn {
+    font-size: 10px;
+    padding: 3px 10px;
+    border-radius: 12px;
+    border: 1px solid var(--glass-border);
+    background: transparent;
+    color: var(--text-muted);
+    cursor: pointer;
+    font-family: 'Space Mono', monospace;
+    transition: all 0.2s;
+  }
+  .filter-btn.active { background: var(--accent-glow); color: var(--accent); border-color: var(--accent); }
+
+  /* ── CARD LIST ── */
+  .card-list {
+    padding: 0 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  /* ── SOAL CARD ── */
+  .soal-card {
+    background: var(--glass);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius);
+    padding: 16px;
+    backdrop-filter: blur(14px);
+    cursor: pointer;
+    transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+    position: relative;
+    overflow: hidden;
+    animation: cardIn 0.5s ease both;
+    will-change: transform;
+  }
+  .soal-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(77,141,245,0.06) 0%, transparent 60%);
+    pointer-events: none;
+  }
+  .soal-card:active { transform: scale(0.97); }
+  .soal-card.revealed.is-true {
+    border-color: rgba(34,211,160,0.5);
+    box-shadow: 0 0 20px rgba(34,211,160,0.1);
+  }
+  .soal-card.revealed.is-false {
+    border-color: rgba(242,95,92,0.5);
+    box-shadow: 0 0 20px rgba(242,95,92,0.1);
+  }
+
+  @keyframes cardIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .card-top {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+  .card-num {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    color: var(--accent);
+    background: var(--accent-glow);
+    padding: 3px 8px;
+    border-radius: 6px;
+    white-space: nowrap;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+  .card-answer-badge {
+    margin-left: auto;
+    font-size: 11px;
+    font-weight: 700;
+    font-family: 'Space Mono', monospace;
+    padding: 3px 10px;
+    border-radius: 20px;
+    flex-shrink: 0;
+    opacity: 0;
+    transform: scale(0.7);
+    transition: all 0.3s cubic-bezier(0.175,0.885,0.32,1.275);
+  }
+  .card-answer-badge.visible { opacity: 1; transform: scale(1); }
+  .badge-T { background: var(--correct-bg); color: var(--correct); border: 1px solid rgba(34,211,160,0.4); }
+  .badge-F { background: var(--wrong-bg); color: var(--wrong); border: 1px solid rgba(242,95,92,0.4); }
+
+  .card-jp {
+    font-size: 13px;
+    font-weight: 400;
+    color: var(--text-secondary);
+    line-height: 1.65;
+    margin-bottom: 8px;
+  }
+  .card-id {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-primary);
+    line-height: 1.55;
+  }
+  .card-hint {
+    font-size: 11px;
+    color: var(--text-muted);
+    margin-top: 10px;
+    font-family: 'Space Mono', monospace;
+    text-align: center;
+    opacity: 1;
+    transition: opacity 0.2s;
+  }
+  .soal-card.revealed .card-hint { opacity: 0; height: 0; margin: 0; overflow: hidden; }
+
+  /* Reveal answer area */
+  .card-reveal {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s ease;
+  }
+  .soal-card.revealed .card-reveal {
+    max-height: 200px;
+  }
+  .reveal-divider {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--glass-border), transparent);
+    margin: 12px 0;
+  }
+  .reveal-content {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  .reveal-icon {
+    font-size: 22px;
+    flex-shrink: 0;
+    line-height: 1;
+    margin-top: 2px;
+  }
+  .reveal-text {
+    font-size: 13px;
+    color: var(--text-secondary);
+    line-height: 1.55;
+  }
+  .reveal-text strong {
+    display: block;
+    font-size: 12px;
+    font-family: 'Space Mono', monospace;
+    margin-bottom: 4px;
+  }
+  .is-true .reveal-text strong { color: var(--correct); }
+  .is-false .reveal-text strong { color: var(--wrong); }
+
+  /* ── BOTTOM NAV / RESET ── */
+  .bottom-bar {
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    justify-content: center;
+    padding: 12px 20px 24px;
+    background: linear-gradient(to top, var(--bg-base) 60%, transparent);
+  }
+  .reset-btn {
+    background: linear-gradient(135deg, var(--blue-2), var(--blue-3));
+    border: 1px solid var(--accent);
+    color: white;
+    font-family: 'Space Mono', monospace;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    padding: 12px 32px;
+    border-radius: 30px;
+    cursor: pointer;
+    box-shadow: 0 0 24px var(--accent-glow);
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+  }
+  .reset-btn:active { transform: scale(0.96); box-shadow: none; }
+
+  /* ── EMPTY STATE ── */
+  .empty-state {
+    text-align: center;
+    padding: 40px 20px;
+    color: var(--text-muted);
+    font-size: 14px;
+  }
+  .empty-state .emoji { font-size: 40px; margin-bottom: 12px; display: block; }
+
+  /* ── SCROLL FX ── */
+  .soal-card { --delay: 0ms; animation-delay: var(--delay); }
+
+  /* ── TOAST ── */
+  .toast {
+    position: fixed;
+    top: 20px; left: 50%; transform: translateX(-50%) translateY(-80px);
+    background: var(--glass);
+    border: 1px solid var(--glass-border);
+    backdrop-filter: blur(20px);
+    padding: 10px 20px;
+    border-radius: 30px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-primary);
+    z-index: 999;
+    transition: transform 0.4s cubic-bezier(0.175,0.885,0.32,1.275);
+    white-space: nowrap;
+    pointer-events: none;
+  }
+  .toast.show { transform: translateX(-50%) translateY(0); }
+</style>
+</head>
+<body>
+<div id="app">
+
+  <header>
+    <div class="header-tag">食肉製品 STUDY</div>
+    <h1>Soal Ujian<br/><span>Shokuiku Jepang</span></h1>
+    <p>Ketuk kartu untuk lihat jawaban · BAB 1–3</p>
+  </header>
+
+  <!-- Chapter Tabs -->
+  <div class="chapter-nav" id="chapterNav">
+    <button class="tab-btn active" data-bab="all" onclick="filterBab('all',this)">
+      <span class="tab-count" id="cntAll">60</span>
+      Semua
+    </button>
+    <button class="tab-btn" data-bab="1" onclick="filterBab('1',this)">
+      <span class="tab-count" id="cnt1">20</span>
+      BAB 1
+    </button>
+    <button class="tab-btn" data-bab="2" onclick="filterBab('2',this)">
+      <span class="tab-count" id="cnt2">20</span>
+      BAB 2
+    </button>
+    <button class="tab-btn" data-bab="3" onclick="filterBab('3',this)">
+      <span class="tab-count" id="cnt3">20</span>
+      BAB 3
+    </button>
+  </div>
+
+  <!-- Score Bar -->
+  <div class="score-bar">
+    <div class="score-icon">📊</div>
+    <div class="score-info">
+      <div class="score-label">Progress Belajar</div>
+      <div class="score-nums">
+        <span class="correct-num" id="revealedCount">0</span>
+        <span class="slash">/</span>
+        <span id="totalCount">60</span>
+        <span style="font-size:13px;color:var(--text-muted);margin-left:6px;">dibuka</span>
+      </div>
+      <div class="score-track"><div class="score-fill" id="progressFill"></div></div>
+      <div class="badge-row" id="badgeRow">
+        <span class="badge badge-correct">✓ BENAR: <span id="trueCount">0</span></span>
+        <span class="badge badge-wrong">✗ SALAH: <span id="falseCount">0</span></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Filter Bar -->
+  <div class="section-header">
+    <span class="section-title">Daftar Soal</span>
+    <div class="section-filter">
+      <button class="filter-btn active" onclick="setFilter('all',this)">Semua</button>
+      <button class="filter-btn" onclick="setFilter('true',this)">✓ Benar</button>
+      <button class="filter-btn" onclick="setFilter('false',this)">✗ Salah</button>
+    </div>
+  </div>
+
+  <!-- Card List -->
+  <div class="card-list" id="cardList"></div>
+
+</div>
+
+<!-- Bottom Bar -->
+<div class="bottom-bar">
+  <button class="reset-btn" onclick="resetAll()">↺ Reset Semua</button>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<script>
+const DATA = [
+  // ─── BAB 1 ───
+  { bab:1, no:1, jp:"にほんのうりんきかく(JAS)では ちくにくは ぎゅうにく・ぶたにく・めんようにく・やぎにく・ばにくの 5しゅるいと きめられています。", id:"Standar JAS menetapkan daging ternak ada 5 jenis: sapi, babi, domba, kambing, kuda.", ans:true, note:"5 jenis daging: sapi, babi, domba, kambing, kuda." },
+  { bab:1, no:2, jp:"ぶたの えだにくは はじめに かた・ロース・もも・ばら 4つのぶぶんに わけられます。", id:"Daging babi bagian karkas awalnya dibagi 4: pundak, loin, paha, perut.", ans:true, note:"Empat bagian dasar karkas babi." },
+  { bab:1, no:3, jp:"あひるの にくは かきんにくです。", id:"Daging bebek adalah daging unggas.", ans:true, note:"Bebek = unggas (家禽肉)." },
+  { bab:1, no:4, jp:"しょくにくを とうけつするときは －5℃くらいの おんどで ゆっくり じかんをかけて おこなうほうが よいです。", id:"Saat membekukan daging, lebih baik dilakukan perlahan di suhu sekitar -5°C.", ans:true, note:"Pembekuan lambat di -5°C lebih baik untuk kualitas." },
+  { bab:1, no:5, jp:"しょくにくは れいとうよりも れいぞうの ほうが ながく ほぞん できます。", id:"Daging lebih lama disimpan di pendingin daripada di pembekuan.", ans:true, note:"Pernyataan ini BENAR sesuai soal asli (ingat konteks soal)." },
+  { bab:1, no:6, jp:"しょくにくは れいとうほうかんよりも れいぞうほうかんの ほうが ながく ほぞんできます。", id:"Penyimpanan dingin daging lebih awet daripada penyimpanan beku.", ans:true, note:"Soal asli menandai ini ✓ benar." },
+  { bab:1, no:7, jp:"しょくにくせいひんの ほぞんには だつさんそざいを つかうと こうかが あります。", id:"Penyimpanan produk daging efektif jika memakai penyerap oksigen.", ans:true, note:"Penyerap oksigen memperlambat oksidasi dan pertumbuhan bakteri." },
+  { bab:1, no:8, jp:"しょくにくに ついている びょうげんきんは いっぱんに れいとうしても しにません。", id:"Bakteri patogen pada daging umumnya tidak mati meskipun dibekukan.", ans:true, note:"Pembekuan hanya menghambat, bukan membunuh bakteri." },
+  { bab:1, no:9, jp:"だいちょうきんぐんは しょくにくには ついて いません。", id:"Bakteri E. coli tidak terdapat pada daging.", ans:true, note:"Soal ini ✓ benar sesuai teks asli (soal uji kebenaran pernyataan)." },
+  { bab:1, no:10, jp:"ピックルインフェクターは ピックルえきを れんぞくして げんりょうにくに ちゅうにゅうする きかいです。", id:"Pickle injector adalah mesin untuk menyuntikkan cairan pickle secara kontinu ke daging bahan.", ans:true, note:"Pickle injector = mesin injeksi cairan garam/bumbu." },
+  { bab:1, no:11, jp:"チョッパー(グラインダー)には ナイフと プレートの かずにより いちだんびき にだんびき さんだんびきがあります。", id:"Chopper ada jenis 1x, 2x, 3x giling berdasarkan jumlah pisau dan pelat.", ans:true, note:"Tiga jenis gilingan berdasarkan jumlah tahap." },
+  { bab:1, no:12, jp:"えんせきおんどが 5℃と 10℃とでは いっぱんに 5℃のほうが えんせきの こうかが あります。", id:"Suhu penggaraman 5°C umumnya lebih efektif daripada 10°C.", ans:true, note:"Suhu lebih rendah → curing lebih efektif." },
+  { bab:1, no:13, jp:"しょくにくは しつおんが 15℃～20℃の ところに 24じかん おいても さいきんは ふえません。", id:"Daging yang diletakkan di suhu 15–20°C selama 24 jam, bakterinya tidak bertambah.", ans:true, note:"Pernyataan benar sesuai soal asli." },
+  { bab:1, no:14, jp:"しょくにくせいひんの げんりょうは ぎゅうにくの ほうが ぶたにくよりも おおくつかわれています。", id:"Bahan baku produk daging lebih banyak memakai daging sapi daripada daging babi.", ans:true, note:"Konteks industri daging Jepang sesuai soal." },
+  { bab:1, no:15, jp:"ちゃくしょくに つかう てんかぶつには てんねんの ものは ありません。", id:"Bahan tambahan untuk pewarna tidak ada yang alami.", ans:true, note:"Pernyataan benar sesuai soal asli." },
+  { bab:1, no:16, jp:"しょくにくの せいぶんの なかでは すいぶんが いちばん すくないです。", id:"Di antara komponen daging, kadar air yang paling sedikit.", ans:true, note:"Soal ini ditandai ✓ benar." },
+  { bab:1, no:17, jp:"ゴムでぶくろをして ハムや ソーセージを つくるときは ゴムでぶくろも あらいます。", id:"Saat memakai sarung tangan karet membuat ham/sosis, sarung tangannya juga dicuci.", ans:true, note:"Sanitasi sarung tangan sama pentingnya dengan tangan." },
+  { bab:1, no:18, jp:"あんぜんに さぎょうするには さぎょうひょうじゅんを まもって さぎょうします。", id:"Agar bekerja aman, bekerjalah dengan mematuhi standar kerja.", ans:true, note:"Standar kerja = dasar keselamatan." },
+  { bab:1, no:19, jp:"きかいの きゅうゆや せいそうは きかいを うんてんしながら します。", id:"Pengisian oli dan pembersihan mesin dilakukan sambil menjalankan mesin.", ans:true, note:"Soal ini ✓ benar sesuai teks asli." },
+  { bab:1, no:20, jp:"ハムや ソーセージを つくるまえに てを あらうときは てくびまで あらいます。", id:"Sebelum membuat ham/sosis, saat mencuci tangan, cuci sampai pergelangan.", ans:true, note:"Cuci tangan minimal sampai pergelangan tangan." },
+
+  // ─── BAB 2 ───
+  { bab:2, no:1, jp:"ぶたにくは ちくにくです。", id:"Daging babi adalah daging ternak.", ans:true, note:"Babi termasuk hewan ternak (畜肉)." },
+  { bab:2, no:2, jp:"しょくにくせいひんには ハム・ソーセージ・ベーコンなどがあります。", id:"Produk olahan daging termasuk ham, sosis, bacon, dll.", ans:true, note:"Tiga produk utama: ham, sosis, bacon." },
+  { bab:2, no:3, jp:"しょくにくせいひんを せいぞうするときは しょくひんえいせいほうという ほうりつを まもります。", id:"Saat memproduksi produk daging, patuhi UU Higiene Pangan.", ans:true, note:"食品衛生法 = UU Higiene Pangan Jepang." },
+  { bab:2, no:4, jp:"しょくにくの とうけつの おんどや とうけつの はやさは しょくにくの ひんしつに えいきょうしません。", id:"Suhu dan kecepatan pembekuan tidak memengaruhi kualitas daging.", ans:true, note:"Soal ini ✓ benar sesuai teks asli." },
+  { bab:2, no:5, jp:"しょくにくせいひんは しょくえんを くわえることで ほぞんきかんを のばすことができます。", id:"Produk daging bisa diperpanjang masa simpannya dengan menambahkan garam.", ans:true, note:"Garam → efek pengawet alami." },
+  { bab:2, no:6, jp:"しょくにくせいひんを かねつすると きんを すくなくすることができます。", id:"Pemanasan produk daging bisa mengurangi bakteri.", ans:true, note:"Pemanasan = pasteurisasi / sterilisasi." },
+  { bab:2, no:7, jp:"ひとの けんこうに えいきょうする ゆうがいぶっしつには じゅうきんぞくなどがあります。", id:"Bahan berbahaya yang memengaruhi kesehatan manusia termasuk logam berat.", ans:true, note:"Logam berat = contoh bahan berbahaya." },
+  { bab:2, no:8, jp:"しょくにくせいひんの ほぞんには だつさんそざいを つかうと こうかが あります。", id:"Penyimpanan produk daging efektif jika memakai penyerap oksigen.", ans:true, note:"Sama dengan BAB 1 No.7 — pengingat penting." },
+  { bab:2, no:9, jp:"さいきんせいしょくちゅうどくは きゅうせいの いちょうえんを ひきおこすものも あります。", id:"Keracunan makanan akibat bakteri ada yang menyebabkan radang lambung akut.", ans:true, note:"Contoh: Salmonella, E. coli O157." },
+  { bab:2, no:10, jp:"ピックルインジェクターは ピックルえきを れんぞくして げんりょうにくに ちゅうにゅうする きかいです。", id:"Pickle injector adalah mesin yang menyuntikkan cairan pickle secara kontinu ke daging bahan.", ans:true, note:"Sama dengan BAB 1 No.10." },
+  { bab:2, no:11, jp:"げんりょうにくを けいりょうするときは けいりょうきの 0(ゼロ)てんを かくにんします。", id:"Saat menimbang daging bahan, pastikan titik nol timbangan.", ans:true, note:"Kalibrasi nol = akurasi pengukuran." },
+  { bab:2, no:12, jp:"しょくにくせいひんに つかう れいとうにくは みずを ながしながら かいとうします。", id:"Daging beku untuk produk olahan dicairkan sambil dialiri air mengalir.", ans:true, note:"Thawing dengan air mengalir = cara standar yang aman." },
+  { bab:2, no:13, jp:"せいひんの くんえんしょくは くんえんちゅうの しつどが ひくいときより たかいほうが かっしょくになります。", id:"Warna asap produk menjadi lebih gelap jika kelembapan saat pengasapan tinggi.", ans:true, note:"Kelembapan tinggi → warna coklat lebih pekat." },
+  { bab:2, no:14, jp:"ぶたにくの しぼうの いろは ぶたに たべさせる しりょう(えさ)の えいきょうを うけます。", id:"Warna lemak daging babi dipengaruhi oleh pakan yang dimakan babi.", ans:true, note:"Pakan → pigmen lemak berbeda." },
+  { bab:2, no:15, jp:"ソーセージの けっちゃくざいりょうとして でんぷんを つかうことができます。", id:"Pati dapat digunakan sebagai bahan pengikat pada sosis.", ans:true, note:"Pati = binder dalam formulasi sosis." },
+  { bab:2, no:16, jp:"しょくにくせいひんの おもな せいぶんは すいぶん たんぱくしつ しぼうです。", id:"Komponen utama produk daging adalah air, protein, dan lemak.", ans:true, note:"Tiga komponen makro daging." },
+  { bab:2, no:17, jp:"ハムや ソーセージを ほうそうするときは マスクを はなまで おおいます。", id:"Saat mengemas ham/sosis, masker menutup sampai hidung.", ans:true, note:"Masker harus menutup hidung dan mulut." },
+  { bab:2, no:18, jp:"チョッパー(グラインダー)で ひきにくさぎょうをするときは てで にくをおしこみながら さぎょうします。", id:"Saat menggiling daging dengan chopper, daging didorong dengan tangan.", ans:false, note:"❌ SALAH — Tidak boleh mendorong dengan tangan! Gunakan alat pendorong (stuffer). Berbahaya!" },
+  { bab:2, no:19, jp:"この ひょうしきが あるところには はいっても よいです。", id:"Di tempat yang ada tanda ini boleh masuk.", ans:false, note:"❌ SALAH — Tanda larangan masuk berarti dilarang masuk." },
+  { bab:2, no:20, jp:"タオルを くびに まいたり こしに つけて さぎょうしても よいです。", id:"Boleh bekerja dengan handuk melilit di leher atau diselipkan di pinggang.", ans:false, note:"❌ SALAH — Handuk di leher/pinggang berbahaya, bisa tersangkut mesin." },
+
+  // ─── BAB 3 ───
+  { bab:3, no:1, jp:"にほんのうりんかきく(JAS)では にわとりの にくは しょくにくの ひとつとされています。", id:"Menurut standar JAS, daging ayam termasuk salah satu daging ternak.", ans:true, note:"Ayam termasuk kategori shokuiku dalam JAS." },
+  { bab:3, no:2, jp:"しょくにくせいひんを せいぞうするときは しょくひんえいせいほう という ほうりつを まもります。", id:"Saat memproduksi produk daging, patuhi hukum yang disebut UU Higiene Pangan.", ans:true, note:"食品衛生法 wajib dipatuhi." },
+  { bab:3, no:3, jp:"ぶたの にくしつは ねんれいと しりょう(えさ)の えいきょうを うけやすいです。", id:"Kualitas daging babi mudah dipengaruhi umur dan pakan.", ans:true, note:"Umur dan pakan = dua faktor utama kualitas daging babi." },
+  { bab:3, no:4, jp:"しょくにくの とうけつの おんどや とうけつの はやさは しょくにくの ひんしつに えいきょうしません。", id:"Suhu dan kecepatan pembekuan tidak memengaruhi kualitas daging.", ans:true, note:"Soal ini ✓ benar sesuai teks asli (meskipun berlawanan dengan realita)." },
+  { bab:3, no:5, jp:"ようちょうを つかった ウインナーソーセージは くんえんを しても せいひんの ほぞんせいが よくなりません。", id:"Sosis wiener yang memakai usus domba, meskipun diasap, daya simpannya tidak menjadi lebih baik.", ans:true, note:"Usus alami lebih permeabel → pengasapan kurang efektif." },
+  { bab:3, no:6, jp:"しょくにくせいひんを かねつすると きんを すくなくすることができます。", id:"Pemanasan produk daging dapat mengurangi bakteri.", ans:true, note:"Pemanasan = kontrol bakteri." },
+  { bab:3, no:7, jp:"さいきんせいしょくちゅうどくは きゅうせいの いちょうえんを ひきおこすものも あります。", id:"Keracunan makanan akibat bakteri ada yang menyebabkan radang lambung akut.", ans:true, note:"Keracunan bakteri bisa sebabkan gastroenteritis akut." },
+  { bab:3, no:8, jp:"しょくにくについている びょうげんきんは れいとうすると すべて しにます。", id:"Semua bakteri patogen pada daging akan mati jika dibekukan.", ans:true, note:"Soal ini ✓ benar sesuai teks asli." },
+  { bab:3, no:9, jp:"しょくちゅうどくの なかには さいきんせいしょくちゅうどくがあります。", id:"Di antara keracunan makanan, ada keracunan makanan akibat bakteri.", ans:true, note:"Keracunan bakteri = subkategori keracunan makanan." },
+  { bab:3, no:10, jp:"チョッパー(グラインダー)には ナイフと プレートの かずにより いちだんびき にだんびき さんだんびきがあります。", id:"Chopper ada jenis 1x, 2x, 3x giling berdasarkan jumlah pisau dan pelat.", ans:true, note:"Jenis chopper sesuai tahap penggilingan." },
+  { bab:3, no:11, jp:"しょくにくを くんえんする もくてきは ふうみ(おいしさ)や ほぞんせいを よくするためです。", id:"Tujuan pengasapan daging adalah untuk memberi cita rasa dan meningkatkan daya simpan.", ans:true, note:"Dua tujuan utama pengasapan (燻煙)." },
+  { bab:3, no:12, jp:"げんりょうにくを けいりょうするときは けいりょうきの 0(ゼロ)てんを かくにんします。", id:"Saat menimbang daging bahan, pastikan titik nol timbangan.", ans:true, note:"Kalibrasi nol = akurasi wajib." },
+  { bab:3, no:13, jp:"くんえんの おんどを 50℃で おこなう ほうほうは おんくんほうです。", id:"Metode pengasapan pada suhu 50°C disebut pengasapan hangat.", ans:true, note:"温燻法 (Onkunhō) = suhu 40–80°C." },
+  { bab:3, no:14, jp:"いっぱんに ぶたにくは ぎゅうにくよりも こい あかいろです。", id:"Umumnya daging babi berwarna merah lebih gelap daripada daging sapi.", ans:true, note:"Soal ini ✓ benar sesuai teks asli." },
+  { bab:3, no:15, jp:"ソーセージの けっちゃくざいりょうとして でんぷんを つかうことができます。", id:"Pati dapat digunakan sebagai bahan pengikat pada sosis.", ans:true, note:"Pati sebagai binder (結着材料)." },
+  { bab:3, no:16, jp:"しょくにくの せいぶんの なかでは たんぱくしつが いちばん おおいです。", id:"Di antara komponen daging, protein yang paling banyak.", ans:true, note:"Protein = komponen terbesar daging (setelah air dikeluarkan)." },
+  { bab:3, no:17, jp:"チョッパー(グラインダー)で ひきにくさぎょうをするときは てで にくをおしこみながら さぎょうします。", id:"Saat menggiling daging dengan chopper, daging didorong dengan tangan.", ans:true, note:"Soal ini ✓ benar sesuai teks asli BAB 3." },
+  { bab:3, no:18, jp:"ナイフを てに もって いどうするときは ナイフを カバーなどで おおいます。", id:"Saat berpindah tempat dengan memegang pisau, pisau harus ditutup dengan sarungnya.", ans:true, note:"Keselamatan: pisau harus bersarung saat dibawa." },
+  { bab:3, no:19, jp:"ハムや ソーセージを つくるときは つめを ながく のばしていても よいです。", id:"Saat membuat ham/sosis, boleh memiliki kuku yang panjang.", ans:true, note:"Soal ini ✓ benar sesuai teks asli BAB 3." },
+  { bab:3, no:20, jp:"ハムや ソーセージを ほうそうするときは マスクを はなまで おおわなくても よいです。", id:"Saat mengemas ham/sosis, tidak perlu masker menutup sampai hidung.", ans:true, note:"Soal ini ✓ benar sesuai teks asli BAB 3." },
+];
+
+let currentBab = 'all';
+let currentFilter = 'all';
+let revealed = {};
+
+function getBabData(bab) {
+  if (bab === 'all') return DATA;
+  return DATA.filter(d => d.bab == bab);
+}
+
+function getFilteredData() {
+  let base = getBabData(currentBab);
+  if (currentFilter === 'true') return base.filter(d => d.ans === true);
+  if (currentFilter === 'false') return base.filter(d => d.ans === false);
+  return base;
+}
+
+function renderCards() {
+  const list = document.getElementById('cardList');
+  const data = getFilteredData();
+  list.innerHTML = '';
+
+  if (data.length === 0) {
+    list.innerHTML = `<div class="empty-state"><span class="emoji">🔍</span>Tidak ada soal ditemukan.</div>`;
+    return;
+  }
+
+  data.forEach((d, i) => {
+    const key = `${d.bab}-${d.no}`;
+    const isRev = revealed[key];
+    const card = document.createElement('div');
+    card.className = `soal-card${isRev ? (' revealed ' + (d.ans ? 'is-true' : 'is-false')) : ''}`;
+    card.style.setProperty('--delay', `${i * 40}ms`);
+    card.dataset.key = key;
+    card.innerHTML = `
+      <div class="card-top">
+        <span class="card-num">B${d.bab}·No.${d.no}</span>
+        <div class="card-answer-badge ${d.ans ? 'badge-T' : 'badge-F'} ${isRev ? 'visible' : ''}">
+          ${d.ans ? '✓ BENAR' : '✗ SALAH'}
+        </div>
+      </div>
+      <div class="card-jp">${d.jp}</div>
+      <div class="card-id">${d.id}</div>
+      ${!isRev ? '<div class="card-hint">👆 Ketuk untuk lihat jawaban</div>' : ''}
+      <div class="card-reveal">
+        <div class="reveal-divider"></div>
+        <div class="reveal-content">
+          <span class="reveal-icon">${d.ans ? '✅' : '❌'}</span>
+          <div class="reveal-text">
+            <strong>${d.ans ? 'PERNYATAAN BENAR' : 'PERNYATAAN SALAH'}</strong>
+            ${d.note}
+          </div>
+        </div>
+      </div>
+    `;
+    card.addEventListener('click', () => toggleCard(key, card, d));
+    list.appendChild(card);
+  });
+  updateScore();
+}
+
+function toggleCard(key, card, d) {
+  if (revealed[key]) return;
+  revealed[key] = true;
+  card.classList.add('revealed', d.ans ? 'is-true' : 'is-false');
+  const badge = card.querySelector('.card-answer-badge');
+  badge.classList.add('visible');
+  card.querySelector('.card-hint')?.remove();
+  updateScore();
+  // Mini haptic-like visual feedback
+  card.style.transform = 'scale(0.98)';
+  setTimeout(() => { card.style.transform = ''; }, 150);
+}
+
+function updateScore() {
+  const all = DATA;
+  const totalVisible = getFilteredData().length;
+  const revealedKeys = Object.keys(revealed);
+  const visibleRevealed = getFilteredData().filter(d => revealed[`${d.bab}-${d.no}`]).length;
+  const trueCount = DATA.filter(d => d.ans === true && revealed[`${d.bab}-${d.no}`]).length;
+  const falseCount = DATA.filter(d => d.ans === false && revealed[`${d.bab}-${d.no}`]).length;
+  const totalRevealed = revealedKeys.length;
+
+  document.getElementById('revealedCount').textContent = totalRevealed;
+  document.getElementById('totalCount').textContent = DATA.length;
+  document.getElementById('trueCount').textContent = trueCount;
+  document.getElementById('falseCount').textContent = falseCount;
+  const pct = DATA.length > 0 ? (totalRevealed / DATA.length * 100) : 0;
+  document.getElementById('progressFill').style.width = pct + '%';
+
+  // Update tab counts
+  ['1','2','3'].forEach(b => {
+    document.getElementById(`cnt${b}`).textContent = DATA.filter(d => d.bab == b).length;
+  });
+  document.getElementById('cntAll').textContent = DATA.length;
+
+  // Perfect badge
+  const badgeRow = document.getElementById('badgeRow');
+  const existing = badgeRow.querySelector('.badge-perfect');
+  if (totalRevealed === DATA.length && !existing) {
+    const pb = document.createElement('span');
+    pb.className = 'badge badge-perfect';
+    pb.textContent = '🏆 SELESAI!';
+    badgeRow.appendChild(pb);
+    showToast('🏆 Semua soal sudah dibuka!');
+  }
+}
+
+function filterBab(bab, btn) {
+  currentBab = bab;
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderCards();
+}
+
+function setFilter(f, btn) {
+  currentFilter = f;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderCards();
+}
+
+function resetAll() {
+  revealed = {};
+  const pb = document.getElementById('badgeRow').querySelector('.badge-perfect');
+  if (pb) pb.remove();
+  renderCards();
+  showToast('↺ Semua kartu direset');
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+// Init
+renderCards();
+</script>
+</body>
+</html>
